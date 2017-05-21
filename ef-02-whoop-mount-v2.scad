@@ -6,7 +6,7 @@ main(
     lens_h = 10,
 
     arm_l = 8,
-    arm_h = 4,
+    arm_h = 3.5,
 
     grip_l = 0.75,
     grip_h = 4.9,
@@ -28,10 +28,12 @@ module main() {
                     t = thickness
                 );
 
-            translate([grip_l / 2, 0, 0])
+            arm_w = slit + thickness * 4;
+
+            translate([grip_l / 2, (lens_d + thickness * 2 - arm_w) / 2, 0])
                 arm(
                     l      = arm_l,
-                    w      = lens_d + thickness * 2,
+                    w      = arm_w,
                     h      = arm_h,
                     slit_w = slit,
                     t      = thickness
@@ -44,47 +46,14 @@ module main() {
                     d = lens_d,
                     l = lens_l,
                     h = lens_h,
-                    t = thickness
+                    t = thickness,
+                    arm_w = arm_w
                 );
         }
 
         translate([-thickness - grip_l, (grip_w - slit) / 2, -1])
             cube(size=[arm_l * 2, slit, grip_h + thickness * 2 + 2]);
     }
-}
-
-module lens_compartment() {
-    spacer_h = 2;
-
-    full_w = d + t * 2;
-
-    difference() {
-        union() {
-            cube([l, full_w, h]);
-
-            translate([0, full_w / 2, h])
-            rotate([0, 90, 0])
-                cylinder(r=full_w / 2, h=l);
-        }
-
-        for(pos = [[t, -1, -1], [t, -1, h + spacer_h / 2]]) {
-            translate(pos)
-                cube(size=[l, full_w + 2, h - spacer_h / 2 + 1]);
-        }
-
-        translate([-1, full_w / 2, h])
-        rotate([0, 90, 0])
-            cylinder(r=d / 2, h=l+2);
-    }
-}
-
-module arm() {
-    reinforsment_w = t * 2 + slit_w;
-
-    cube(size=[l, w, t]);
-
-    translate([0, (w -  reinforsment_w) / 2, 0])
-        cube(size=[l, reinforsment_w, h]);
 }
 
 module grip() {
@@ -100,5 +69,40 @@ module grip() {
 
         translate([(full_l - l) / 2, -1 , t])
             cube(size=[l, w + 2, h]);
+    }
+}
+
+module arm() {
+    reinforsment_w = t * 2 + slit_w;
+
+    cube(size=[l, w, t]);
+
+    translate([0, (w -  reinforsment_w) / 2, 0])
+        cube(size=[l, reinforsment_w, h]);
+}
+
+module lens_compartment() {
+    spacer_h = 2;
+
+    full_w = d + t * 2;
+
+    difference() {
+        union() {
+            translate([0, (full_w - arm_w) / 2, 0])
+                cube([l, arm_w, h]);
+
+            translate([0, full_w / 2, h])
+            rotate([0, 90, 0])
+                cylinder(r=full_w / 2, h=l);
+        }
+
+        for(pos = [[t, -1, -1], [t, -1, h + spacer_h / 2]]) {
+            translate(pos)
+                cube(size=[l, full_w + 2, h - spacer_h / 2 + 1]);
+        }
+
+        translate([-1, full_w / 2, h])
+        rotate([0, 90, 0])
+            cylinder(r=d / 2, h=l+2);
     }
 }
