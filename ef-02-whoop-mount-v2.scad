@@ -15,7 +15,7 @@ $fn = 100;
         grip_w = 10,
 
         angle     = 10,
-        thickness = 1.6,
+        thickness = 1.3,
         slit      = 2
     );
 
