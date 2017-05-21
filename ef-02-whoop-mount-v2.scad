@@ -1,21 +1,27 @@
 $fn = 100;
 
-main(
-    lens_d = 7.8,
-    lens_l = 2.8,
-    lens_h = 10,
+// intersection(){
+    rotate([0, 90 - 10, 0])
+    main(
+        lens_d = 9,
+        lens_l = 1.6,
+        lens_h = 10,
 
-    arm_l = 8,
-    arm_h = 3.5,
+        arm_l = 8,
+        arm_h = 3.5,
 
-    grip_l = 0.75,
-    grip_h = 4.9,
-    grip_w = 10,
+        grip_l = 0.75,
+        grip_h = 4.9,
+        grip_w = 10,
 
-    angle     = 10,
-    thickness = 1.2,
-    slit      = 3
-);
+        angle     = 10,
+        thickness = 1.6,
+        slit      = 2
+    );
+
+//     translate([-20, -20, -10])
+//         cube(size=[100, 100, 3.7], center=false);
+// }
 
 module main() {
     difference() {
@@ -30,7 +36,7 @@ module main() {
 
             arm_w = slit + thickness * 4;
 
-            translate([grip_l / 2, (lens_d + thickness * 2 - arm_w) / 2, 0])
+            translate([grip_l / 2, (grip_w - arm_w) / 2, 0])
                 arm(
                     l      = arm_l,
                     w      = arm_w,
@@ -39,9 +45,9 @@ module main() {
                     t      = thickness
                 );
 
-            translate([arm_l + grip_l / 2, 0, 0])
+            translate([arm_l + grip_l / 2, (grip_w - lens_d - thickness * 2) / 2, 0])
             rotate([0, angle, 0])
-            translate([-thickness, 0, 0])
+            translate([-lens_l, 0, 0])
                 lens_compartment(
                     d = lens_d,
                     l = lens_l,
@@ -64,7 +70,7 @@ module grip() {
     difference() {
         cube(size=[full_l, w, full_h]);
 
-        translate([full_l / 2 + l / 2 - slit, -1 , t])
+        translate([t, -1 , t])
             cube(size=[slit, w + 2, full_h]);
 
         translate([(full_l - l) / 2, -1 , t])
@@ -96,10 +102,10 @@ module lens_compartment() {
                 cylinder(r=full_w / 2, h=l);
         }
 
-        for(pos = [[t, -1, -1], [t, -1, h + spacer_h / 2]]) {
-            translate(pos)
-                cube(size=[l, full_w + 2, h - spacer_h / 2 + 1]);
-        }
+        // for(pos = [[t, -1, -1], [t, -1, h + spacer_h / 2]]) {
+        //     translate(pos)
+        //         cube(size=[l, full_w + 2, h - spacer_h / 2 + 1]);
+        // }
 
         translate([-1, full_w / 2, h])
         rotate([0, 90, 0])
