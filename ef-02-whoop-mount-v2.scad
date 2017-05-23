@@ -1,26 +1,32 @@
 $fn = 100;
 
+THE_BLESSED_NUMBER = 0.402;
+
+function bless(x) = floor(x / THE_BLESSED_NUMBER) * THE_BLESSED_NUMBER;
+
+slit = 0.4;
+
 // intersection(){
     rotate([0, 90 - 10, 0])
     main(
-        lens_d = 9,
-        lens_l = 1.6,
-        lens_h = 10,
+        lens_d = 8.15,
+        lens_l = 1.2,
+        lens_h = 11.2,
 
-        arm_l = 8,
+        arm_l = 8.2,
         arm_h = 3.5,
 
-        grip_l = 0.75,
-        grip_h = 4.9,
-        grip_w = 10,
+        grip_l = 0.85,
+        grip_h = 4.8,
+        grip_w = 10 + slit,
 
         angle     = 10,
-        thickness = 1.3,
-        slit      = 2
+        thickness = bless(1.5),
+        slit      = slit
     );
 
-//     translate([-20, -20, -10])
-//         cube(size=[100, 100, 3.7], center=false);
+    // translate([-20, -20, -10])
+    //     cube(size=[100, 100, 2.95], center=false);
 // }
 
 module main() {
@@ -58,22 +64,22 @@ module main() {
         }
 
         translate([-thickness - grip_l, (grip_w - slit) / 2, -1])
-            cube(size=[arm_l * 2, slit, grip_h + thickness * 2 + 2]);
+            cube(size=[arm_l * 2, slit, lens_h]);
     }
 }
 
 module grip() {
     full_l = l + t * 2;
-    full_h = h + t * 2;
-    slit = 0.4;
+    full_h = h + t * 3;
+    slit = 0.1;
 
     difference() {
         cube(size=[full_l, w, full_h]);
 
-        translate([t, -1 , t])
+        translate([t, -1 , t * 2])
             cube(size=[slit, w + 2, full_h]);
 
-        translate([(full_l - l) / 2, -1 , t])
+        translate([(full_l - l) / 2, -1 , t * 2])
             cube(size=[l, w + 2, h]);
     }
 }
@@ -101,11 +107,6 @@ module lens_compartment() {
             rotate([0, 90, 0])
                 cylinder(r=full_w / 2, h=l);
         }
-
-        // for(pos = [[t, -1, -1], [t, -1, h + spacer_h / 2]]) {
-        //     translate(pos)
-        //         cube(size=[l, full_w + 2, h - spacer_h / 2 + 1]);
-        // }
 
         translate([-1, full_w / 2, h])
         rotate([0, 90, 0])
