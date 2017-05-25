@@ -6,21 +6,23 @@ function bless(x) = floor(x / THE_BLESSED_NUMBER) * THE_BLESSED_NUMBER;
 
 slit = 0.4;
 
+angle = 10;
+
 // intersection(){
-    rotate([0, 90 - 10, 0])
+    rotate([0, 90 - angle, 0])
     main(
-        lens_d = 8.15,
+        lens_d = 8.2,
         lens_l = 1.2,
-        lens_h = 11.2,
+        lens_h = 10.4,
 
         arm_l = 8.2,
-        arm_h = 3.5,
+        arm_h = bless(3),
 
         grip_l = 0.85,
         grip_h = 4.8,
         grip_w = 10 + slit,
 
-        angle     = 10,
+        angle     = angle,
         thickness = bless(1.5),
         slit      = slit
     );
@@ -40,7 +42,7 @@ module main() {
                     t = thickness
                 );
 
-            arm_w = slit + thickness * 4;
+            arm_w = bless(thickness * 4 + slit);
 
             translate([grip_l / 2, (grip_w - arm_w) / 2, 0])
                 arm(
@@ -59,7 +61,8 @@ module main() {
                     l = lens_l,
                     h = lens_h,
                     t = thickness,
-                    arm_w = arm_w
+                    arm_w = arm_w,
+                    slit_w = slit
                 );
         }
 
@@ -70,22 +73,28 @@ module main() {
 
 module grip() {
     full_l = l + t * 2;
-    full_h = h + t * 3;
+    full_h = h + t * 2.5;
     slit = 0.1;
 
     difference() {
         cube(size=[full_l, w, full_h]);
 
-        translate([t, -1 , t * 2])
+        translate([t, -1 , t * 1.5])
             cube(size=[slit, w + 2, full_h]);
 
-        translate([(full_l - l) / 2, -1 , t * 2])
+        translate([(full_l - l) / 2, -1 , t * 1.5])
             cube(size=[l, w + 2, h]);
+
+        cut_side = sqrt(2 * t * t);
+
+        translate([slit / 2, -1 , full_h + t / 2])
+        rotate([0, 45, 0])
+            cube(size=[cut_side, w + 2, cut_side]);
     }
 }
 
 module arm() {
-    reinforsment_w = t * 2 + slit_w;
+    reinforsment_w = bless((w - slit_w) / 1.5);
 
     cube(size=[l, w, t]);
 
@@ -97,11 +106,15 @@ module lens_compartment() {
     spacer_h = 2;
 
     full_w = d + t * 2;
+    reinforsment_w = bless((arm_w - slit_w) / 1.5);
 
     difference() {
         union() {
             translate([0, (full_w - arm_w) / 2, 0])
                 cube([l, arm_w, h]);
+
+            translate([-t, (full_w - reinforsment_w) / 2, 0])
+                cube([l, reinforsment_w, h - d / 2 - t]);
 
             translate([0, full_w / 2, h])
             rotate([0, 90, 0])
