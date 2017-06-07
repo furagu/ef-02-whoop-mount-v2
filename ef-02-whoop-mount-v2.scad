@@ -11,11 +11,11 @@ angle = 10;
 // intersection(){
     rotate([0, 90 - angle, 0])
     main(
-        lens_d = 8.2,
+        lens_d = 8,
         lens_l = 1.2,
         lens_h = 10.4,
 
-        arm_l = 8.2,
+        arm_l = 8.1,
         arm_h = bless(3),
 
         grip_l = 0.85,
@@ -94,7 +94,7 @@ module grip() {
 }
 
 module arm() {
-    reinforsment_w = bless((w - slit_w) / 1.5);
+    reinforsment_w = THE_BLESSED_NUMBER * 4 + slit_w;
 
     cube(size=[l, w, t]);
 
@@ -106,19 +106,29 @@ module lens_compartment() {
     spacer_h = 2;
 
     full_w = d + t * 2;
-    reinforsment_w = bless((arm_w - slit_w) / 1.5);
+    reinforsment_w = THE_BLESSED_NUMBER * 4 + slit_w;
 
     difference() {
         union() {
             translate([0, (full_w - arm_w) / 2, 0])
                 cube([l, arm_w, h]);
 
+            horizontal_reinforcement_h = THE_BLESSED_NUMBER * 2;
+
+            translate([-t, (full_w - arm_w) / 2 - t, h - d / 2 - horizontal_reinforcement_h])
+                cube([l, arm_w + t * 2, horizontal_reinforcement_h]);
+
             translate([-t, (full_w - reinforsment_w) / 2, 0])
-                cube([l, reinforsment_w, h - d / 2 - t]);
+                cube([l, reinforsment_w, h - d / 2]);
 
             translate([0, full_w / 2, h])
             rotate([0, 90, 0])
+            hull() {
                 cylinder(r=full_w / 2, h=l);
+
+                translate([t, 0, 0])
+                    cylinder(r=full_w / 2, h=l);
+            }
         }
 
         translate([-1, full_w / 2, h])
