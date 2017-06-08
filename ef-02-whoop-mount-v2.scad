@@ -4,18 +4,18 @@ THE_BLESSED_NUMBER = 0.402;
 
 function bless(x) = floor(x / THE_BLESSED_NUMBER) * THE_BLESSED_NUMBER;
 
-slit = 0.4;
+slit = 0.2;
 
 angle = 10;
 
 // intersection(){
     rotate([0, 90 - angle, 0])
     main(
-        lens_d = 8,
+        lens_d = 7.9,
         lens_l = 1.2,
         lens_h = 10.4,
 
-        arm_l = 8.1,
+        arm_l = 7.9,
         arm_h = bless(3),
 
         grip_l = 0.85,
@@ -72,7 +72,7 @@ module main() {
 }
 
 module grip() {
-    full_l = l + t * 2;
+    full_l = l + t * 1.7;
     full_h = h + t * 2.5;
     slit = 0.1;
 
@@ -90,6 +90,16 @@ module grip() {
         translate([slit / 2, -1 , full_h + t / 2])
         rotate([0, 45, 0])
             cube(size=[cut_side, w + 2, cut_side]);
+
+        chamfer = 1.8;
+        cut_s = full_h * 2;
+        for(ya = [[0, 45], [w, -45]]) {
+            translate([0, ya[0], full_h - chamfer])
+            rotate([ya[1], 0, 0])
+            translate([-cut_s / 2, -cut_s / 2, 0])
+                cube(size=[cut_s, cut_s, cut_s]);
+
+        }
     }
 }
 
