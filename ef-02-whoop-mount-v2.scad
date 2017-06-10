@@ -11,11 +11,11 @@ angle = 10;
 // intersection(){
     rotate([0, 90 - angle, 0])
     main(
-        lens_d = 7.9,
+        lens_d = 7.7,
         lens_l = 1.2,
-        lens_h = 10.4,
+        lens_h = 10,
 
-        arm_l = 7.9,
+        arm_l = 8.2,
         arm_h = bless(3),
 
         grip_l = 0.85,
@@ -72,7 +72,7 @@ module main() {
 }
 
 module grip() {
-    full_l = l + t * 1.7;
+    full_l = l + t * 2;
     full_h = h + t * 2.5;
     slit = 0.1;
 
@@ -125,11 +125,13 @@ module lens_compartment() {
 
             horizontal_reinforcement_h = THE_BLESSED_NUMBER * 2;
 
-            translate([-t, (full_w - arm_w) / 2 - t, h - d / 2 - horizontal_reinforcement_h])
-                cube([l, arm_w + t * 2, horizontal_reinforcement_h]);
+            reinforcement_tolerance = 0.2;
+
+            translate([-t, (full_w - arm_w) / 2 - t / 2, h - d / 2 - horizontal_reinforcement_h - reinforcement_tolerance])
+                cube([l, arm_w + t, horizontal_reinforcement_h]);
 
             translate([-t, (full_w - reinforsment_w) / 2, 0])
-                cube([l, reinforsment_w, h - d / 2]);
+                cube([l, reinforsment_w, h - d / 2 - reinforcement_tolerance]);
 
             translate([0, full_w / 2, h])
             rotate([0, 90, 0])
