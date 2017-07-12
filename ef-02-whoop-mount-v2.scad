@@ -4,32 +4,27 @@ THE_BLESSED_NUMBER = 0.402;
 
 function bless(x) = floor(x / THE_BLESSED_NUMBER) * THE_BLESSED_NUMBER;
 
-slit = 0.2;
+slit = 0.1;
 
-angle = 10;
+angle = 15;
 
-// intersection(){
-    rotate([0, 90 - angle, 0])
-    main(
-        lens_d = 7.7,
-        lens_l = 1.2,
-        lens_h = 10,
+rotate([0, 90 - angle, 0])
+main(
+    lens_d = 7.9,
+    lens_l = 1.2,
+    lens_h = 10,
 
-        arm_l = 8.2,
-        arm_h = bless(3),
+    arm_l = 8.0,
+    arm_h = bless(3),
 
-        grip_l = 0.85,
-        grip_h = 4.8,
-        grip_w = 10 + slit,
+    grip_l = 0.85,
+    grip_h = 4.8,
+    grip_w = 10 + slit,
 
-        angle     = angle,
-        thickness = bless(1.5),
-        slit      = slit
-    );
-
-    // translate([-20, -20, -10])
-    //     cube(size=[100, 100, 2.95], center=false);
-// }
+    angle     = angle,
+    thickness = bless(1.5),
+    slit      = slit
+);
 
 module main() {
     difference() {
